@@ -21,6 +21,10 @@ SYMMETRIC_TECH = [
     ('ceaser cipher', 'Ceaser Ciper')
 ]
 
+ASYMMETRIC_TECH = [
+    ('des', 'des 8 bit  ')
+]
+
 
 class CryptoForm(forms.Form):
     symmetric_asymmetric = forms.ChoiceField(
@@ -30,5 +34,13 @@ class CryptoForm(forms.Form):
     symmetric_tech = forms.ChoiceField(
         choices=SYMMETRIC_TECH,
         widget = forms.RadioSelect,
+        required=False
     )
+    asymmetric_tech = forms.ChoiceField(
+        choices = ASYMMETRIC_TECH,
+        widget = forms.RadioSelect,
+        required=False
+    )
+    message = forms.CharField(label="Your Name", max_length=100)
+    key = forms.CharField( widget=forms.TextInput(attrs={'type':'number'}))
 

@@ -1,11 +1,12 @@
 $(document).ready(function() {
     $('input[type=radio][name=choice]').change(function() {
-        if (this.value == 'Symmetric Algo') {
-            console.log("Allot Thai Gayo Bhai");
+        if($(this).val() == "Symmetric Algo"){
+            $("#id_symmetric_tech").fadeIn();
+            $("#id_asymmetric_tech").hide();
         }
-        
         else{
-            console.log("Transfer Thai Gayo");
+            $("#id_symmetric_tech").hide();
+            $("#id_asymmetric_tech").fadeIn();
         }
     });
 });
