@@ -29,20 +29,21 @@
     <label class="radio-inline">
       <input type="radio" name="optradio">Asymmetric Algo</label>
   </center>
+  <form method="post">
+    {% csrf_token %}
+    <div class="leftside">
+      <div class="form-group">
+        <label for="usr">Enter your message</label>
+        <input type="email" class="form-control" id="message">
+      </div>
+      <div class="form-group">
+        <label for="usr">Enter your key</label>
+        <input type="number" class="form-control" id="key">
+      </div>
 
-  <div class="leftside">
-    <div class="form-group">
-      <label for="usr">Enter your message</label>
-      <input type="email" class="form-control" id="message">
+      <button type="submit" class="btn btn-primary">Submit</button>
     </div>
-    <div class="form-group">
-      <label for="usr">Enter your key</label>
-      <input type="number" class="form-control" id="key">
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-
+  </form>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
