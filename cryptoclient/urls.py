@@ -8,5 +8,6 @@ urlpatterns = [
     path('yourname/', views.get_name, name= 'yourname'),
     path('thanks/', views.thankspage, name= 'thanks'),
     path('contactform/', views.contactform, name='contactform'),
-    path('cryptons', views.crypto, name="cryptons")
+    path('cryptons/', views.crypto, name="cryptons"),
+    path('plaintext/', views.decrypt, name= 'plaintext')
 ]

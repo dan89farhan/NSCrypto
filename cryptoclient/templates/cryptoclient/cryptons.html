@@ -3,21 +3,15 @@
 <script src="{% static 'cryptoclient/js/jquery-3.3.1.min.js' %}"></script>
 <script src="{% static 'cryptoclient/js/app.js' %}"></script>
 
-<style>
-    #id_symmetric_tech , #id_asymmetric_tech{
-        display: none;
-    }
 
-</style>
-
-<form action="{% url "index" %}" method="post">
+<form action="{% url "cryptons" %}" method="post">
     {% csrf_token %}
     <div class="fieldWrapper">
         {{ form.symmetric_asymmetric.errors }}
         <label for="{{ form.symmetric_asymmetric.id_for_label }}">Select Any one Crypto Algo:</label>
         {% for choice in form.symmetric_asymmetric %}
             
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.choice_label }}" />
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.choice_label }}" required = true />
             <label for="choice{{ forloop.counter }}">{{ choice.choice_label }}</label>
             
         {% endfor %}
@@ -29,12 +23,12 @@
         {{ form.asymmetric_tech }}
         
     </div>
-    
-    <label for="{{ form.message.id_for_label }}">{{ form.message.name }}:</label>
-        {{ form.message }}
-        <br />
-    <label for="{{ form.key.id_for_label }}">{{ form.key.name }}:</label>
-        {{ form.key }}
+    <div class="message-key">
+        <label for="{{ form.message.id_for_label }}">{{ form.message.name }}:</label>
+            {{ form.message }}
+            <br />
+        <label for="{{ form.key.id_for_label }}">{{ form.key.name }}:</label>
+            {{ form.key }}
         
     </div>
     <br/>

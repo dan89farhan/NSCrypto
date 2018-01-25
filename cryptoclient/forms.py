@@ -30,6 +30,7 @@ class CryptoForm(forms.Form):
     symmetric_asymmetric = forms.ChoiceField(
         choices=SYMMETRIC_ASYMMETRIC,
         widget = forms.RadioSelect,
+        required = False
     )
     symmetric_tech = forms.ChoiceField(
         choices=SYMMETRIC_TECH,
@@ -41,6 +42,9 @@ class CryptoForm(forms.Form):
         widget = forms.RadioSelect,
         required=False
     )
-    message = forms.CharField(label="Your Name", max_length=100)
-    key = forms.CharField( widget=forms.TextInput(attrs={'type':'number'}))
+    message = forms.CharField(label="Your Name", max_length=100, required=False)
+    key = forms.CharField( widget=forms.TextInput(attrs={'type':'number'}), required=False)
+
+class Decrypt(forms.Form):
+    abc = ''
 
