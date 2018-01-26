@@ -71,7 +71,7 @@ def crypto(request):
             asymmetric_tech = form.cleaned_data['asymmetric_tech']
             message = form.cleaned_data['message']
             key = int(form.cleaned_data['key'])
-            data = form.cleaned_data
+            # data = form.cleaned_data
             encrypt = ''
             message = bytes(message, 'utf-8')
             for chars in enumerate(message):
@@ -82,7 +82,7 @@ def crypto(request):
             print('Encrypted message is %s ', encrypt)
 
             if key and message and (symmetric_tech or asymmetric_tech) and algo:
-                print(data)
+                # print(data)
                 return render(request, 'cryptoclient/thanks.html', {'encrypt': encrypt, 'key': key})
             else:
                 form = CryptoForm()
@@ -103,12 +103,12 @@ def decrypt(request):
 
     message = request.POST.get('ct')
     key = int(request.POST.get('key'))
-    decrypt = ''
+    decrypt_message = ''
     message = bytes(message, 'utf-8')
     for chars in enumerate(message):
 
-        decrypt += chr(chars[1] - key)
+        decrypt_message += chr(chars[1] - key)
         # print(bytes([chars[1] + 3]))
 
-    print('Decrypted message is %s ', decrypt)
-    return render(request, 'cryptoclient/decrypt.html', {'message': decrypt, 'key': key})
+    print('Decrypted message is %s ', decrypt_message)
+    return render(request, 'cryptoclient/decrypt.html', {'message': decrypt_message, 'key': key})
