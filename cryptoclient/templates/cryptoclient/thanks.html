@@ -9,9 +9,9 @@
 </head>
 
 <body>
-    Thank you! Your encrypted message is {{ encrypt }} {{ key }}
+    Thank you! Your encrypted message is {{ encryptdecrypt.message }} {{ encryptdecrypt.key }}
     <p>click on decrypt to send the decrypted message to the sender.</p>
-    <form action="{% url "plaintext" %}" method="post">
+    <form action="{% url 'cryptoclient:decrypt' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="ct" value="{{ encrypt }}" />
         <input type="hidden" name="key" value="{{ key }}" />

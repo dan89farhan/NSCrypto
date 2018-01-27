@@ -4,10 +4,14 @@
 <script src="{% static 'cryptoclient/js/app.js' %}"></script>
 
 
-<form action="{% url "cryptons" %}" method="post">
+<form action="{% url 'cryptoclient:encrypt' %}" method="post">
     {% csrf_token %}
     <div class="fieldWrapper">
-        {{ form.symmetric_asymmetric.errors }}
+        
+        {% if algo == '' %}
+            <p><strong>You haven't select any Algo:</strong></p>
+        {% endif %}
+            
         <label for="{{ form.symmetric_asymmetric.id_for_label }}">Select Any one Crypto Algo:</label>
         {% for choice in form.symmetric_asymmetric %}
             
@@ -18,7 +22,11 @@
         <br />
     </div>
     <div class="fieldWrapper">
-
+        
+        {% if symmetric_tech == '' and algo == 'Symmetric Algo' %}
+        <p><strong>Select One Symmetric Algo</strong></p>
+        {% endif %}
+            
         {{ form.symmetric_tech }}
         {{ form.asymmetric_tech }}
         

@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
+from django.views import generic
+
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from .forms import Nameform, ContactForm, CryptoForm, Decrypt
+from .models import EncryptDecrypt
 # Create your views here.
 
 
@@ -11,8 +16,10 @@ def index(request):
     return render(request, "cryptoclient/index.html")
 
 
-def thankspage(request):
-    return render(request, 'cryptoclient/thanks.html')
+class ThanksView(generic.DeleteView):
+    model = EncryptDecrypt
+    template_name = 'cryptoclient/thanks.html'
+    # return render(request, 'cryptoclient/thanks.html')
 
 
 def get_name(request):
@@ -58,14 +65,11 @@ def register(request):
     return render(request, "cryptoclient/index.html")
 
 
-def crypto(request):
-    # return render(request, 'cryptoclient/yourname.html')
+def encrypt(request):
     if request.method == 'POST':
-
         form = CryptoForm(request.POST)
-        print("Hello %s", form.errors)
+        print("Error in form %s", form.errors)
         if form.is_valid():
-
             algo = request.POST.get('choice')
             symmetric_tech = form.cleaned_data['symmetric_tech']
             asymmetric_tech = form.cleaned_data['asymmetric_tech']
@@ -82,27 +86,25 @@ def crypto(request):
             print('Encrypted message is %s ', encrypt)
 
             if key and message and (symmetric_tech or asymmetric_tech) and algo:
-                # print(data)
-                return render(request, 'cryptoclient/thanks.html', {'encrypt': encrypt, 'key': key})
-            else:
-                form = CryptoForm()
-                return render(request, 'cryptoclient/cryptons.html', {'form': form})
+                encryptdecrypt = EncryptDecrypt.objects.get(pk=1)
+                encryptdecrypt.symmetric_asymmetric = algo
+                encryptdecrypt.symmetric_tech = symmetric_tech
+                encryptdecrypt.asymmetric_tech = asymmetric_tech
+                encryptdecrypt.message = encrypt
+                encryptdecrypt.key = key
+                encryptdecrypt.save()
 
-        else:
-            print("in else parts")
-            form = CryptoForm()
-            return render(request, 'cryptoclient/cryptons.html', {'form': form})
+                return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
     else:
         form = CryptoForm()
-        return render(request, 'cryptoclient/cryptons.html', {'form': form})
-
-    # return render(request, 'cryptoclient/cryptons.html', {'form': form})
+    return render(request, 'cryptoclient/encrypt.html', {'form': form})
 
 
 def decrypt(request):
 
-    message = request.POST.get('ct')
-    key = int(request.POST.get('key'))
+    encryptdecrypt = EncryptDecrypt.objects.get(pk=1)
+    message = encryptdecrypt.message
+    key = encryptdecrypt.key
     decrypt_message = ''
     message = bytes(message, 'utf-8')
     for chars in enumerate(message):
@@ -111,4 +113,11 @@ def decrypt(request):
         # print(bytes([chars[1] + 3]))
 
     print('Decrypted message is %s ', decrypt_message)
+    encryptdecrypt.message = decrypt_message
+    encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': decrypt_message, 'key': key})
+
+
+class EncryptedView(generic.DetailView):
+    model = EncryptDecrypt
+    template_name = 'cryptoclient/encrypt.html'
