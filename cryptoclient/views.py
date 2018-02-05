@@ -68,43 +68,63 @@ def register(request):
 def encrypt(request):
     if request.method == 'POST':
         form = CryptoForm(request.POST)
-        print("Error in form %s", form.errors)
+        print("Error in form {} ".format(form.errors) )
         if form.is_valid():
             algo = request.POST.get('choice')
             symmetric_tech = form.cleaned_data['symmetric_tech']
             asymmetric_tech = form.cleaned_data['asymmetric_tech']
             message = form.cleaned_data['message']
             key = int(form.cleaned_data['key'])
-            # data = form.cleaned_data
-            encrypt = ''
-            message = bytes(message, 'utf-8')
-            for chars in enumerate(message):
 
-                encrypt += chr(chars[1] + key)
-                # print(bytes([chars[1] + 3]))
-
-            print('Encrypted message is %s ', encrypt)
-
+            print("{} {} {} {} {} ".format(algo, symmetric_tech, asymmetric_tech, message, key))
             if key and message and (symmetric_tech or asymmetric_tech) and algo:
-                encryptdecrypt = EncryptDecrypt.objects.get(pk=1)
-                encryptdecrypt.symmetric_asymmetric = algo
-                encryptdecrypt.symmetric_tech = symmetric_tech
-                encryptdecrypt.asymmetric_tech = asymmetric_tech
-                encryptdecrypt.message = encrypt
-                encryptdecrypt.key = key
-                encryptdecrypt.save()
+                if algo == 'Symmetric Algo':
+                    if symmetric_tech == 'ceaser cipher':
+                        print("in algo and symmetric_tech ")
+                        encryptValue = ceaserCipherEncrypt(message, key)
+                        encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
 
-                return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
+                        return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
+                        
     else:
         form = CryptoForm()
     return render(request, 'cryptoclient/encrypt.html', {'form': form})
 
 
 def decrypt(request):
-
     encryptdecrypt = EncryptDecrypt.objects.get(pk=1)
+    algo = encryptdecrypt.symmetric_asymmetric
+    symmetric_tech = encryptdecrypt.symmetric_tech
+    asymmetric_tech = encryptdecrypt.asymmetric_tech
     message = encryptdecrypt.message
     key = encryptdecrypt.key
+    if algo == 'Symmetric Algo':
+        if symmetric_tech == 'ceaser cipher':
+            message = ceaserCipherDecrypt(message, key)
+    encryptdecrypt.message = message
+    encryptdecrypt.save()
+    return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})
+
+
+class EncryptedView(generic.DetailView):
+    model = EncryptDecrypt
+    template_name = 'cryptoclient/encrypt.html'
+
+
+def ceaserCipherEncrypt(message, key):
+    encryptValue = ''
+    message = bytes(message, 'utf-8')
+    for chars in enumerate(message):
+
+        encryptValue += chr(chars[1] + key)
+        # print(bytes([chars[1] + 3]))
+
+    print('Encrypted message is %s ', encryptValue)
+    return encryptValue
+
+def ceaserCipherDecrypt(message, key):
+    
+    
     decrypt_message = ''
     message = bytes(message, 'utf-8')
     for chars in enumerate(message):
@@ -113,11 +133,14 @@ def decrypt(request):
         # print(bytes([chars[1] + 3]))
 
     print('Decrypted message is %s ', decrypt_message)
-    encryptdecrypt.message = decrypt_message
+    return decrypt_message
+
+def saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key):
+    encryptdecrypt = EncryptDecrypt.objects.get(pk=1)
+    encryptdecrypt.symmetric_asymmetric = algo
+    encryptdecrypt.symmetric_tech = symmetric_tech
+    encryptdecrypt.asymmetric_tech = asymmetric_tech
+    encryptdecrypt.message = encryptValue
+    encryptdecrypt.key = key
     encryptdecrypt.save()
-    return render(request, 'cryptoclient/decrypt.html', {'message': decrypt_message, 'key': key})
-
-
-class EncryptedView(generic.DetailView):
-    model = EncryptDecrypt
-    template_name = 'cryptoclient/encrypt.html'
+    return encryptdecrypt
