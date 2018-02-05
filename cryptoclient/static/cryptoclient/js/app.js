@@ -6,7 +6,10 @@ $(document).ready(function () {
     var symmetric_tech = 'input[type=radio][name=symmetric_tech]'; // get the value of radio button symmetric technique for e.g ceaser cipher, hill cipher etc.
     var asymmetric_tech = 'input[type=radio][name=asymmetric_tech]'; // get the value of radio button Asymmetric technique for e.g des 8 etc.
     if ($(choice).is(':checked')) {
+        
+        
         if ($(choice).val() == "Symmetric Algo") {
+            
             $("#id_symmetric_tech").fadeIn();
             $("#id_asymmetric_tech").hide();
             if ($(symmetric_tech).is(':checked')) {
@@ -30,6 +33,7 @@ $(document).ready(function () {
     $(choice).change(function () {
         
         $(".message-key").hide();
+        
         if ($(this).val() == "Symmetric Algo") {
             $(asymmetric_tech).removeAttr('required')
             $(symmetric_tech).attr('required', true)
@@ -38,9 +42,14 @@ $(document).ready(function () {
             if ($(symmetric_tech).is(':checked')) {
                 $(".message-key").fadeIn();
             }
+            
             $(symmetric_tech).change(function () {
-
+                console.log($(this).val());
                 if ($(this).val() == "ceaser cipher") {
+                    $(".message-key").fadeIn();
+
+                }
+                else if ($(this).val() == "play fair") {
                     $(".message-key").fadeIn();
 
                 }

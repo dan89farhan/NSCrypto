@@ -8,6 +8,8 @@ from django.urls import reverse
 
 from .forms import Nameform, ContactForm, CryptoForm, Decrypt
 from .models import EncryptDecrypt
+
+import string
 # Create your views here.
 
 
@@ -77,14 +79,18 @@ def encrypt(request):
             key = int(form.cleaned_data['key'])
 
             print("{} {} {} {} {} ".format(algo, symmetric_tech, asymmetric_tech, message, key))
+            encryptdecrypt = ''
             if key and message and (symmetric_tech or asymmetric_tech) and algo:
                 if algo == 'Symmetric Algo':
                     if symmetric_tech == 'ceaser cipher':
-                        print("in algo and symmetric_tech ")
                         encryptValue = ceaserCipherEncrypt(message, key)
                         encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
-
                         return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
+                    elif symmetric_tech == 'play fair':
+                        print("in algo and symmetric_tech ")
+                        encryptValue = playfairEncrypt(message, key)
+                    
+                    
                         
     else:
         form = CryptoForm()
@@ -133,6 +139,22 @@ def ceaserCipherDecrypt(message, key):
         # print(bytes([chars[1] + 3]))
 
     print('Decrypted message is %s ', decrypt_message)
+    return decrypt_message
+
+def playfairEncrypt(message, key):
+    decrypt_message = ''
+    print("in playfairEncrypt method {} ".format(decrypt_message))
+    matrix = [ [ [] for i in range(5)] for j in range(5)]
+    lowerCase = string.ascii_lowercase
+    count = 0
+    for i in range(5):
+        for j in range(5):
+            if lowerCase[count] == 'i':
+                count += 1
+            matrix[i][j] = lowerCase[count]
+            count += 1
+    
+    
     return decrypt_message
 
 def saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key):

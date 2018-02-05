@@ -10,7 +10,8 @@ class EncryptDecrypt(models.Model):
     ]
 
     SYMMETRIC_TECH = [
-        ('ceaser cipher', 'Ceaser Ciper')
+        ('ceaser cipher', 'Ceaser Ciper'),
+        ('play fair', 'Play Fair'),
     ]
 
     ASYMMETRIC_TECH = [
