@@ -12,6 +12,8 @@ class EncryptDecrypt(models.Model):
     SYMMETRIC_TECH = [
         ('ceaser cipher', 'Ceaser Ciper'),
         ('play fair', 'Play Fair'),
+        ('hill cipher', 'Hill Cipher'),
+        
     ]
 
     ASYMMETRIC_TECH = [
@@ -21,5 +23,5 @@ class EncryptDecrypt(models.Model):
     symmetric_tech = models.CharField(max_length = 100, choices = SYMMETRIC_TECH, default = '')
     asymmetric_tech = models.CharField(max_length = 100, choices = ASYMMETRIC_TECH, default = '')
     message = models.CharField(max_length=100, blank=False, null=False)
-    key = models.IntegerField()
+    key = models.CharField(max_length = 100, blank=False, null=False)
 
