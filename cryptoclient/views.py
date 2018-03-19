@@ -12,6 +12,7 @@ from .models import EncryptDecrypt
 from .ceasercipher import CeaserCipher
 from .playfair import *
 from .hill import Hill
+from .vernam import Vernam
 import string
 # Create your views here.
 
@@ -94,6 +95,9 @@ def encrypt(request):
                     elif symmetric_tech == 'hill cipher':
                         hill = Hill()
                         encryptValue = hill.encrypt(message)
+                    elif symmetric_tech == 'vernam cipher':
+                        vernam = Vernam()
+                        encryptValue = vernam.encrypt(message.upper(), key.upper())
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     

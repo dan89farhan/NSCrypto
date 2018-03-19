@@ -11,10 +11,10 @@ class Vernam:
                 p = 0
         return answer
 
-    def encrypt(self, msg):
-        key = "cvwopslweinedvq9fnasdlkfn2"
+    def encrypt(self, msg, key):
+        # key = "cvwopslweinedvq9fnasdlkfn2"
         return self.makeVernamCypher(msg,key)
 
     def decrypt(self, msg):
-        key = "cvwopslweinedvq9fnasdlkfn2"
+        # key = "cvwopslweinedvq9fnasdlkfn2"
         return self.makeVernamCypher(msg,key)
