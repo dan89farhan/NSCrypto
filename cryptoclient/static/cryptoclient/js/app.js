@@ -54,7 +54,7 @@ $(document).ready(function () {
 
                 }
                 else if ($(this).val() == "hill cipher") {
-                    $("#id_message").fadeIn();
+                    $(".message-key").fadeIn();
 
                 }
                 else {

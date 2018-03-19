@@ -13,6 +13,7 @@ class EncryptDecrypt(models.Model):
         ('ceaser cipher', 'Ceaser Ciper'),
         ('play fair', 'Play Fair'),
         ('hill cipher', 'Hill Cipher'),
+        ('vernam cipher','Vernam Cipher'),
         
     ]
 
