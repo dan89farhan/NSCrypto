@@ -4,80 +4,89 @@ import numpy as np
 # Create your tests here.
 class PlayFairTestCase(TestCase):
 	def test_hill_cipher(self):
-			
-		# if __name__ == '__main__':
-			# 
+		message = encrypt('farhan')
+		print( message )
+		message = decrypt(message)
+		print( message )
 
-			# key
-			# secret = [[ 8,  6,  9, 5  ],
-			# 		[ 6,  9,  5, 10 ],
-			# 		[ 5,  8,  4, 9  ],
-			# 		[ 10, 6, 11, 4  ]]
-			secret = [ [8,9], [10, 5]]
-			# plaintext
-			text = "hill"
+global debug
+debug = 0
 
-			# Use key (matrix) encryption string
-			ciphertext = encrypt(secret, text)
+def modMatInv(A, p):  # Finds the inverse of matrix A mod p
+	n = len(A)
+	A = np.matrix(A)
+	adj = np.zeros(shape=(n, n))
+	for i in range(0, n):
+		for j in range(0, n):
+			adj[i][j] = ((-1) ** (i + j) * int(round(np.linalg.det(minor(A, j, i))))) % p
+	return (modInv(int(round(np.linalg.det(A))), p) * adj) % p
 
-			# Ciphertext
-			print(ciphertext)
-			
-			# Decrypt string
-			# print(decrypt(secret, ciphertext))		
+def modInv( a, p):  # Finds the inverse of a mod p, if it exists
+	for i in range(1, p):
+		if (i * a) % p == 1: return i
+	raise ValueError(str(a) + " has no inverse mod " + str(p))
 
-# 
-# encryption
-# 
-def encrypt(matrix, words):
-	check_param(matrix, words)
-	cipher = ''
-	length = len(matrix)
-	matrix = np.array(matrix)
-	words = words.lower()
-	arr = [ord(i) - ord('a') for i in words]
-	count = 0
-	for ch in words:
-		if str.isalpha(str(ch)):
-			cipher += chr(sum(matrix[count % length] * arr) % 26 + ord('a'))
-			count += 1
-	return cipher
+def minor( A, i, j):  # Return matrix A with the ith row and jth column deleted
+	A = np.array(A)
+	minor = np.zeros(shape=(len(A) - 1, len(A) - 1))
+	p = 0
+	for s in range(0, len(minor)):
+		if p == i: p = p + 1
+		q = 0
+		for t in range(0, len(minor)):
+			if q == j: q = q + 1
+			minor[s][t] = A[p][q]
+			q = q + 1
+		p = p + 1
+	return minor
 
+def encrypt( msg):
 
-# 
-# Decryption
-# 
-def decrypt(matrix, words):
-	cipher = ''
-	length = len(matrix)
-	matrix = (np.linalg.inv(matrix) + 26) % 26
-	words = words.lower()
-	arr = np.array([ord(i) - ord('a') for i in words], dtype=int)
-	count = 0
-	for ch in words:
-		if str.isalpha(str(ch)):
-			number = sum(matrix[count % length] * arr) % 26
-			cipher += chr(int(str(number)[:-2]) + ord('a'))
-			count += 1
-	return cipher
+	key = [[3, 2, 7], [4, 5, 6], [1, 9, 8]]
+	# key = [[3, 2], [4, 5]]
+	key = np.transpose(key)
+	sz = len(key)
 
+	msg = msg.upper()
 
-# 
-# checking
-# 
-def check_param(matrix, words):
-	if len(matrix) * len(matrix) != \
-	sum([len(matrix[i]) for i in range(len(matrix))]):
-		print("Error: The matrix must be m * m")
-		quit()
-	elif len(matrix) != len(words):
-		print("Error: The length of the plaintext must be m （Equal to the length and width of the matrix")
-		quit()
+	triple = [list(msg[i * sz:(i * sz) + sz]) for i in range(0, int(len(msg) / sz))]
+	if debug > 0: print(triple)
+	mul = [i[:] for i in triple]
+	for x in range(len(triple)):
+		for i in range(len(triple[x])):
+			triple[x][i] = ord(triple[x][i]) - 65
+	if debug > 0: print(triple)
+	for x in range(len(triple)):
+		mul[x] = np.dot(key, triple[x]) % 26
+	if debug > 0: print(mul)
+	enc = ""
+	for x in range(len(mul)):
+		for s in range(0, sz): enc += chr(mul[x][s] + 65)
+	return enc
+
+def decrypt( msg):
+
+	key = [[3, 2, 7], [4, 5, 6], [1, 9, 8]]
+	key = np.transpose(key)
+	sz = len(key)
+
 	try:
-		np.linalg.inv(matrix)
-	except Exception:
-		print("Error: Irreversible matrix: " + str(e))
-		quit()
+		deckey = modMatInv(key, 26)
+	except ValueError:
+		return
+	triple = [list(msg[i * sz:(i * sz) + sz]) for i in range(0, int(len(msg) / sz))]
+	mul = [i[:] for i in triple]
+	for x in range(len(triple)):
+		for i in range(len(triple[x])):
+			triple[x][i] = ord(triple[x][i]) - 65
+	if debug > 0: print(triple)
+	for x in range(len(triple)):
+		mul[x] = np.dot(deckey, triple[x]) % 26
+	if debug > 0: print(mul)
+	dec = ""
+	for x in range(len(mul)):
+		for s in range(0, sz): dec += chr(int(mul[x][s]) + 65)
+	return dec
 
 
-
+	
