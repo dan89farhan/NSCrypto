@@ -44,7 +44,7 @@ $(document).ready(function () {
             }
             
             $(symmetric_tech).change(function () {
-                console.log($(this).val());
+                console.log($(this).val()+"Hello");
                 if ($(this).val() == "ceaser cipher") {
                     $(".message-key").fadeIn();
 
@@ -53,9 +53,15 @@ $(document).ready(function () {
                     $(".message-key").fadeIn();
                 }
                 else if ($(this).val() == "hill cipher") {
+                    console.log("Checked ");
+                    
                     $(".message-key").fadeIn();
+                     $('label[for="id_key"]').hide();
+                     $("input#id_key").hide();
+                     
                 }
                 else {
+                    
                     $(".message-key").hide();
 
                 }
