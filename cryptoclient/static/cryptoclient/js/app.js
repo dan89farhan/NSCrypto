@@ -53,11 +53,12 @@ $(document).ready(function () {
                     $(".message-key").fadeIn();
                 }
                 else if ($(this).val() == "hill cipher") {
-                    console.log("Checked ");
+                   
+                    $('label[for="id_message"]').fadeIn();
+                    $("input#id_message").fadeIn();
                     
-                    $(".message-key").fadeIn();
-                     $('label[for="id_key"]').hide();
-                     $("input#id_key").hide();
+                    
+                     $("#id_key").removeAttr('required');
                      
                 }
                 else {
