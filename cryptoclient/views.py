@@ -11,6 +11,7 @@ from .models import EncryptDecrypt
 
 from .ceasercipher import CeaserCipher
 from .playfair import *
+from .hill import Hill
 import string
 # Create your views here.
 
@@ -90,6 +91,8 @@ def encrypt(request):
                     elif symmetric_tech == 'play fair':
                         encryptValue = playfairEncrypt(message.upper(), key.upper())
                         encryptValue = ''.join(encryptValue)
+                    elif symmetric_tech == 'hill cipher':
+                        encryptValue = Hill.encrypt(message)
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
@@ -111,7 +114,9 @@ def decrypt(request):
         if symmetric_tech == 'ceaser cipher':
             message = CeaserCipher.ceaserCipherDecrypt(message, int(key))
         elif symmetric_tech == 'play fair':
-            message = playFairDecrypt(message, key) 
+            message = playFairDecrypt(message, key)
+        elif symmetric_tech == 'hill cipher':
+            message = Hill.decrypt(message)
     encryptdecrypt.message = message
     encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})
