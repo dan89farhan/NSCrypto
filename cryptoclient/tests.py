@@ -2,91 +2,78 @@ from django.test import TestCase
 import string
 import numpy as np
 # Create your tests here.
+LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 class PlayFairTestCase(TestCase):
-	def test_hill_cipher(self):
-		message = encrypt('farhan')
-		print( message )
-		message = decrypt(message)
-		print( message )
 
-global debug
-debug = 0
-
-def modMatInv(A, p):  # Finds the inverse of matrix A mod p
-	n = len(A)
-	A = np.matrix(A)
-	adj = np.zeros(shape=(n, n))
-	for i in range(0, n):
-		for j in range(0, n):
-			adj[i][j] = ((-1) ** (i + j) * int(round(np.linalg.det(minor(A, j, i))))) % p
-	return (modInv(int(round(np.linalg.det(A))), p) * adj) % p
-
-def modInv( a, p):  # Finds the inverse of a mod p, if it exists
-	for i in range(1, p):
-		if (i * a) % p == 1: return i
-	raise ValueError(str(a) + " has no inverse mod " + str(p))
-
-def minor( A, i, j):  # Return matrix A with the ith row and jth column deleted
-	A = np.array(A)
-	minor = np.zeros(shape=(len(A) - 1, len(A) - 1))
-	p = 0
-	for s in range(0, len(minor)):
-		if p == i: p = p + 1
-		q = 0
-		for t in range(0, len(minor)):
-			if q == j: q = q + 1
-			minor[s][t] = A[p][q]
-			q = q + 1
-		p = p + 1
-	return minor
-
-def encrypt( msg):
-
-	key = [[3, 2, 7], [4, 5, 6], [1, 9, 8]]
-	# key = [[3, 2], [4, 5]]
-	key = np.transpose(key)
-	sz = len(key)
-
-	msg = msg.upper()
-
-	triple = [list(msg[i * sz:(i * sz) + sz]) for i in range(0, int(len(msg) / sz))]
-	if debug > 0: print(triple)
-	mul = [i[:] for i in triple]
-	for x in range(len(triple)):
-		for i in range(len(triple[x])):
-			triple[x][i] = ord(triple[x][i]) - 65
-	if debug > 0: print(triple)
-	for x in range(len(triple)):
-		mul[x] = np.dot(key, triple[x]) % 26
-	if debug > 0: print(mul)
-	enc = ""
-	for x in range(len(mul)):
-		for s in range(0, sz): enc += chr(mul[x][s] + 65)
-	return enc
-
-def decrypt( msg):
-
-	key = [[3, 2, 7], [4, 5, 6], [1, 9, 8]]
-	key = np.transpose(key)
-	sz = len(key)
-
-	try:
-		deckey = modMatInv(key, 26)
-	except ValueError:
-		return
-	triple = [list(msg[i * sz:(i * sz) + sz]) for i in range(0, int(len(msg) / sz))]
-	mul = [i[:] for i in triple]
-	for x in range(len(triple)):
-		for i in range(len(triple[x])):
-			triple[x][i] = ord(triple[x][i]) - 65
-	if debug > 0: print(triple)
-	for x in range(len(triple)):
-		mul[x] = np.dot(deckey, triple[x]) % 26
-	if debug > 0: print(mul)
-	dec = ""
-	for x in range(len(mul)):
-		for s in range(0, sz): dec += chr(int(mul[x][s]) + 65)
-	return dec
+	def test_vernam(self):
+		encrypt = encryptMessage("farhan", "vishal")
+		print(encrypt)
+		decrypt = decryptMessage("farhan", encrypt)
+		print(decrypt)
 
 
-	
+
+def encryptMessage(key, message):
+
+	return translateMessage(key, message, 'encrypt')
+
+def decryptMessage(key, message):
+
+	return translateMessage(key, message, 'decrypt')
+
+
+
+
+
+def translateMessage(key, message, mode):
+
+	translated = [] # stores the encrypted/decrypted message string
+
+	keyIndex = 0
+
+	key = key.upper()
+
+	for symbol in message: # loop through each character in message
+
+		num = LETTERS.find(symbol.upper())
+
+		if num != -1: # -1 means symbol.upper() was not found in LETTERS
+
+			if mode == 'encrypt':
+
+				num += LETTERS.find(key[keyIndex]) # add if encrypting
+
+			elif mode == 'decrypt':
+
+				num -= LETTERS.find(key[keyIndex]) # subtract if decrypting
+
+
+
+			num %= len(LETTERS) # handle the potential wrap-around
+
+
+
+			# add the encrypted/decrypted symbol to the end of translated.
+
+			if symbol.isupper():
+
+				translated.append(LETTERS[num])
+
+			elif symbol.islower():
+
+				translated.append(LETTERS[num].lower())
+
+			keyIndex += 1 # move to the next letter in the key
+
+			if keyIndex == len(key):
+				keyIndex = 0
+
+		else:
+
+			# The symbol was not in LETTERS, so add it to translated as is.
+
+			translated.append(symbol)
+
+
+
+	return ''.join(translated)

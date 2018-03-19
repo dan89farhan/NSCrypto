@@ -97,7 +97,7 @@ def encrypt(request):
                         encryptValue = hill.encrypt(message)
                     elif symmetric_tech == 'vernam cipher':
                         vernam = Vernam()
-                        encryptValue = vernam.encrypt(message.upper(), key.upper())
+                        encryptValue = vernam.encryptMessage(key.upper(), message.upper())
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
@@ -123,6 +123,9 @@ def decrypt(request):
         elif symmetric_tech == 'hill cipher':
             hill = Hill()
             message = hill.decrypt(message)
+        elif symmetric_tech == 'vernam cipher':
+            vernam = Vernam()
+            message = vernam.decryptMessage(key.upper(), message.upper())
     encryptdecrypt.message = message
     encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})
