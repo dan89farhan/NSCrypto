@@ -53,6 +53,10 @@ $(document).ready(function () {
                     $(".message-key").fadeIn();
 
                 }
+                else if ($(this).val() == "hill cipher") {
+                    $("#id_message").fadeIn();
+
+                }
                 else {
                     $(".message-key").hide();
 
