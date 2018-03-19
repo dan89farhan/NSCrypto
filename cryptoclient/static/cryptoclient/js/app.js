@@ -51,11 +51,9 @@ $(document).ready(function () {
                 }
                 else if ($(this).val() == "play fair") {
                     $(".message-key").fadeIn();
-
                 }
                 else if ($(this).val() == "hill cipher") {
                     $(".message-key").fadeIn();
-
                 }
                 else {
                     $(".message-key").hide();
