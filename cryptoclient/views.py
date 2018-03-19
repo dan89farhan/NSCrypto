@@ -92,7 +92,8 @@ def encrypt(request):
                         encryptValue = playfairEncrypt(message.upper(), key.upper())
                         encryptValue = ''.join(encryptValue)
                     elif symmetric_tech == 'hill cipher':
-                        encryptValue = Hill.encrypt(message)
+                        hill = Hill()
+                        encryptValue = hill.encrypt(message)
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
@@ -116,7 +117,8 @@ def decrypt(request):
         elif symmetric_tech == 'play fair':
             message = playFairDecrypt(message, key)
         elif symmetric_tech == 'hill cipher':
-            message = Hill.decrypt(message)
+            hill = Hill()
+            message = hill.decrypt(message)
     encryptdecrypt.message = message
     encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})

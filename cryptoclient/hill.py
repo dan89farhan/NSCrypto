@@ -1,3 +1,4 @@
+import numpy as np
 class Hill:
     global debug
     debug = 0
