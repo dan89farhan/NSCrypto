@@ -2,6 +2,7 @@ $(document).ready(function () {
     $("#id_symmetric_tech").hide();
     $("#id_asymmetric_tech").hide();
     $('.message-key').hide();
+    $(".message-key2").hide();
     var choice = 'input[type=radio][name=choice]'; // get the value of radio button choice(Symmetric or Assymetric)
     var symmetric_tech = 'input[type=radio][name=symmetric_tech]'; // get the value of radio button symmetric technique for e.g ceaser cipher, hill cipher etc.
     var asymmetric_tech = 'input[type=radio][name=asymmetric_tech]'; // get the value of radio button Asymmetric technique for e.g des 8 etc.
