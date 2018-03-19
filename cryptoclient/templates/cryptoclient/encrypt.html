@@ -1,10 +1,16 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'cryptoclient/css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'cryptoclient/css/mystyle.css' %}" />
 <script src="{% static 'cryptoclient/js/jquery-3.3.1.min.js' %}"></script>
 <script src="{% static 'cryptoclient/js/app.js' %}"></script>
 
-
-<form action="{% url 'cryptoclient:encrypt' %}" method="post">
+<body>
+<div id="main-wrapper">
+<center><h2>Cryptography Algorithms</h2>
+<img src="http://www.c360inc.com/wp-content/uploads/2015/11/Network-Security-Infrastructure.jpg" style="width:150px;border-radius:50%;"/>
+</center>
+<br>
+<br>
+<form action="{% url 'cryptoclient:encrypt' %}" method="post"> 
     {% csrf_token %}
     <div class="fieldWrapper">
         
@@ -12,7 +18,7 @@
             <p><strong>You haven't select any Algo:</strong></p>
         {% endif %}
             
-        <label for="{{ form.symmetric_asymmetric.id_for_label }}">Select Any one Crypto Algo:</label>
+        <label for="{{ form.symmetric_asymmetric.id_for_label }}">Select any one Crypto Algo:</label>
         {% for choice in form.symmetric_asymmetric %}
             
             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.choice_label }}" required = true />
@@ -24,7 +30,7 @@
     <div class="fieldWrapper">
         
         {% if symmetric_tech == '' and algo == 'Symmetric Algo' %}
-        <p><strong>Select One Symmetric Algo</strong></p>
+        <p><strong>Select one Symmetric Algo</strong></p>
         {% endif %}
             
         {{ form.symmetric_tech }}
@@ -44,6 +50,9 @@
         
     </div>
     <br/>
-    <input type="submit" value="submit">
+    <input type="submit" value="submit" style="  background-color: #4CAF50;border: none;
+    color: white;margin-left:25px;">
 
 </form>
+</div>
+</body>

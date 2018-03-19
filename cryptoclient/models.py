@@ -6,7 +6,7 @@ from django.db import models
 class EncryptDecrypt(models.Model):
     SYMMETRIC_ASYMMETRIC = [
         ('symmetric', 'Symmetric Algo'),
-        ('asymmetric', 'ASymmetric Algo'),
+        ('asymmetric', 'Asymmetric Algo'),
     ]
 
     SYMMETRIC_TECH = [

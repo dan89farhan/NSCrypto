@@ -61,10 +61,22 @@ $(document).ready(function () {
                 else if ($(this).val() == "hill cipher") {
                    
                     $(".message-key").fadeIn();
-                    
-                     $("#id_key").removeAttr('required');
+                     $(".message-key2").fadeIn();
+				
+                  
+                   
                      
                 }
+				else if ($(this).val() == "vernam cipher") {
+                    $(".message-key").fadeIn();
+					 $(".message-key2").fadeIn();
+                  
+                }
+				
+				
+				
+				
+				
                 else {
                     
                     $(".message-key").hide();
