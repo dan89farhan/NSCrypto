@@ -95,7 +95,8 @@ def encrypt(request):
                         encryptValue = ''.join(encryptValue)
                     elif symmetric_tech == 'hill cipher':
                         hill = Hill()
-                        encryptValue = hill.encrypt(message)
+                        encryptValue = hill.encrypt(message, key)
+                        # print("Key is ", key.split())
                     elif symmetric_tech == 'vernam cipher':
                         vernam = Vernam()
                         encryptValue = vernam.encryptMessage(key.upper(), message.upper())

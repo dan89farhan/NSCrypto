@@ -15,6 +15,7 @@ class EncryptDecrypt(models.Model):
         ('hill cipher', 'Hill Cipher'),
         ('vernam cipher','Vernam Cipher'),
         ('rail fence', 'Rail Fence'),
+        ('columnar','Columnar'),
         
     ]
 

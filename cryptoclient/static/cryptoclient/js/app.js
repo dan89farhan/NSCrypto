@@ -73,8 +73,11 @@ $(document).ready(function () {
                   
                 }
 				
-				
-				
+                else if ($(this).val() == "rail fence") {
+                   
+                    $(".message-key").fadeIn();
+                     $(".message-key2").fadeIn();
+                }
 				
 				
                 else {

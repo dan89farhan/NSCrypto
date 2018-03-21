@@ -31,7 +31,9 @@ class Hill:
             p = p + 1
         return minor
 
-    def encrypt(self, msg):
+    def encrypt(self, msg, key):
+        key = int( key.split() )
+        print(np.reshape(key, (-1,3)))
 
         key = [[3, 2, 7], [4, 5, 6], [1, 9, 8]]
         key = np.transpose(key)
