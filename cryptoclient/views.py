@@ -13,6 +13,7 @@ from .ceasercipher import CeaserCipher
 from .playfair import *
 from .hill import Hill
 from .vernam import Vernam
+from .railfence import RailFence
 import string
 # Create your views here.
 
@@ -98,6 +99,9 @@ def encrypt(request):
                     elif symmetric_tech == 'vernam cipher':
                         vernam = Vernam()
                         encryptValue = vernam.encryptMessage(key.upper(), message.upper())
+                    elif symmetric_tech == 'rail fence':
+                        railfence = RailFence()
+                        encryptValue = railfence.encryptFence(message, int(key) )
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
@@ -126,6 +130,9 @@ def decrypt(request):
         elif symmetric_tech == 'vernam cipher':
             vernam = Vernam()
             message = vernam.decryptMessage(key.upper(), message.upper())
+        elif symmetric_tech == 'rail fence':
+            railfence = RailFence()
+            message = railfence.decryptFence(message, int(key))
     encryptdecrypt.message = message
     encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})
