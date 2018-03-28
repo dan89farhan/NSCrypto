@@ -14,6 +14,7 @@ from .playfair import *
 from .hill import Hill
 from .vernam import Vernam
 from .railfence import RailFence
+from .columnar import Columnar
 import string
 # Create your views here.
 
@@ -103,6 +104,10 @@ def encrypt(request):
                     elif symmetric_tech == 'rail fence':
                         railfence = RailFence()
                         encryptValue = railfence.encryptFence(message, int(key) )
+
+                    elif symmetric_tech == 'columnar':
+                        columnar = Columnar()
+                        encryptValue = columnar.EncryptMessage(key, message)
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
@@ -134,6 +139,10 @@ def decrypt(request):
         elif symmetric_tech == 'rail fence':
             railfence = RailFence()
             message = railfence.decryptFence(message, int(key))
+        
+        elif symmetric_tech == 'columnar':
+            columnar = Columnar()
+            message = columnar.DecryptMessage(key, message)
     encryptdecrypt.message = message
     encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})

@@ -78,7 +78,41 @@ $(document).ready(function () {
                     $(".message-key").fadeIn();
                      $(".message-key2").fadeIn();
                 }
-				
+                
+                
+                else if ($(this).val() == "columnar") {
+                   
+                    $(".message-key").fadeIn();
+                     $(".message-key2").fadeIn();
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				
                 else {
                     
