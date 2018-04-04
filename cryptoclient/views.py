@@ -132,7 +132,8 @@ def decrypt(request):
             message = playFairDecrypt(message, key)
         elif symmetric_tech == 'hill cipher':
             hill = Hill()
-            message = hill.decrypt(message)
+            # print("key is ", key)
+            message = hill.decrypt(message, key)
         elif symmetric_tech == 'vernam cipher':
             vernam = Vernam()
             message = vernam.decryptMessage(key.upper(), message.upper())
@@ -144,7 +145,8 @@ def decrypt(request):
             columnar = Columnar()
             message = columnar.DecryptMessage(key, message)
     encryptdecrypt.message = message
-    encryptdecrypt.save()
+    print("message is ", message)
+    # encryptdecrypt.save()
     return render(request, 'cryptoclient/decrypt.html', {'message': message, 'key': key})
 
 

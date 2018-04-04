@@ -56,11 +56,21 @@ class Hill:
             for s in range(0, sz): enc += chr(mul[x][s] + 65)
         return enc
 
-    def decrypt(self, msg):
+    def decrypt(self, msg, key):
 
         key = [[3, 2, 7], [4, 5, 6], [1, 9, 8]]
+        # print("key is ", key)
+        # key = ( key.split() )
+        # key =  np.reshape(key, (-1,3))
+        # print( "list key is ", list(key) )
+        # key = key.astype(int)
+        # key = np.transpose(key)
+        # sz = len(key)
+
+        # print("size is ", sz )
         key = np.transpose(key)
         sz = len(key)
+        msg = msg.upper()
 
         try:
             deckey = self.modMatInv(key, 26)
