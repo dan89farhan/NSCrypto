@@ -18,5 +18,5 @@ application = get_wsgi_application()
 # please remove the below comment to run on server
 
 
-# from whitenoise.django import DjangoWhiteNoise
-# application = DjangoWhiteNoise(application)
+from whitenoise.django import DjangoWhiteNoise
+application = DjangoWhiteNoise(application)
