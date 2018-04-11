@@ -61,7 +61,7 @@ $(document).ready(function () {
                 else if ($(this).val() == "hill cipher") {
                    
                     $(".message-key").fadeIn();
-                     $(".message-key2").fadeIn();
+                    $(".message-key2").fadeIn();
 				
                   
                    
@@ -69,14 +69,14 @@ $(document).ready(function () {
                 }
 				else if ($(this).val() == "vernam cipher") {
                     $(".message-key").fadeIn();
-					 $(".message-key2").fadeIn();
+					$(".message-key2").fadeIn();
                   
                 }
 				
                 else if ($(this).val() == "rail fence") {
                    
                     $(".message-key").fadeIn();
-                     $(".message-key2").fadeIn();
+                    $(".message-key2").fadeIn();
                 }
                 
                 
@@ -89,7 +89,14 @@ $(document).ready(function () {
 
     
                 else if ($(this).val() == "aes") {
-                    console.log("In aes");
+                    
+                    
+                    $(".message-key").fadeIn();
+                    $(".message-key2").fadeIn();
+                }
+
+                else if ($(this).val() == "sdes") {
+                    
                     
                     $(".message-key").fadeIn();
                     $(".message-key2").fadeIn();
@@ -118,9 +125,10 @@ $(document).ready(function () {
 
 
 
-
 				
                 else {
+
+                    console.log("in else ", $(this).val())
                     
                     $(".message-key").hide();
                     $(".message-key2").hide();

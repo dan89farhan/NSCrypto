@@ -58,9 +58,9 @@ class AES():
 
     def encrypt(self, ptext):
         """Encrypt plaintext block"""
-        
-        # self.keyExp(0b0100101011110101)
+        key = 0b0100101011110101
 
+        self.keyExp(key)
         ptext =int(ptext, base = 2)
         print("new Type is  ", type(ptext))
 
@@ -77,12 +77,21 @@ class AES():
         
     def decrypt(self, ctext):
         """Decrypt ciphertext block"""
+
+        key = 0b0100101011110101
+        print("Before transformation Key is ", key)
+
+        self.keyExp(key)
+
+        ctext =int(ctext, base = 2)
+
+
         def iMixCol(s):
-            return [mult(9, s[0]) ^ mult(2, s[2]), mult(9, s[1]) ^ mult(2, s[3]),
-                    mult(9, s[2]) ^ mult(2, s[0]), mult(9, s[3]) ^ mult(2, s[1])]
+            return [self.mult(9, s[0]) ^ self.mult(2, s[2]), self.mult(9, s[1]) ^ self.mult(2, s[3]),
+                    self.mult(9, s[2]) ^ self.mult(2, s[0]), self.mult(9, s[3]) ^ self.mult(2, s[1])]
         
-        state = self.intToVec(((w[4] << 8) + w[5]) ^ ctext)
-        state = self.sub4NibList(sBoxI, shiftRow(state))
-        state = iMixCol(addKey(intToVec((w[2] << 8) + w[3]), state))
-        state = self.sub4NibList(sBoxI, shiftRow(state))
-        return vecToInt(addKey(intToVec((w[0] << 8) + w[1]), state))
+        state = self.intToVec(((self.w[4] << 8) + self.w[5]) ^ ctext)
+        state = self.sub4NibList(self.sBoxI, self.shiftRow(state))
+        state = iMixCol(self.addKey(self.intToVec((self.w[2] << 8) + self.w[3]), state))
+        state = self.sub4NibList(self.sBoxI, self.shiftRow(state))
+        return self.vecToInt(self.addKey(self.intToVec((self.w[0] << 8) + self.w[1]), state))

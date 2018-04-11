@@ -17,6 +17,7 @@ class EncryptDecrypt(models.Model):
         ('rail fence', 'Rail Fence'),
         ('columnar','Columnar'),
         ('aes', 'AES'),
+        ('sdes', 'SDES'),
     ]
 
     ASYMMETRIC_TECH = [

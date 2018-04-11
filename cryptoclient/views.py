@@ -115,6 +115,11 @@ def encrypt(request):
                         #  message=bin(int(message,base=2))
                         print("Message is ", message)
                         encryptValue = aes.encrypt(message)
+                        encryptValue = bin(encryptValue)
+                    elif symmetric_tech == 'sdes':
+                        print('message is ', message)
+                        
+
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
@@ -151,6 +156,12 @@ def decrypt(request):
         elif symmetric_tech == 'columnar':
             columnar = Columnar()
             message = columnar.DecryptMessage(key, message)
+        
+        elif symmetric_tech == 'aes':
+            aes = AES()
+            # print("message is ", message)
+            message = aes.decrypt(message)
+            message = bin(message)
     encryptdecrypt.message = message
     print("message is ", message)
     # encryptdecrypt.save()

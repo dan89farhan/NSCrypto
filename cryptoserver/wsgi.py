@@ -15,7 +15,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cryptoserver.settings")
 
 application = get_wsgi_application()
 
-# please remove the below comment to run on server
+# please remove the below comment to run on local server
 
 
 # from whitenoise.django import DjangoWhiteNoise
