@@ -8,7 +8,7 @@ class AES():
             0x6, 0x0, 0x2, 0x3, 0xc, 0x4, 0xd, 0xe]
 
     # Round keys: K0 = w0 + w1; K1 = w2 + w3; K2 = w4 + w5
-    w = [None] * 6
+    w = [0] * 6
 
     def mult(self, p1, p2):
         """Multiply two polynomials in GF(2^4)/x^4 + x + 1"""
@@ -46,28 +46,34 @@ class AES():
         """Generate the three round keys"""
         def sub2Nib(b):
             """Swap each nibble and substitute it using sBox"""
-            return sBox[b >> 4] + (sBox[b & 0x0f] << 4)
+            return self.sBox[b >> 4] + (self.sBox[b & 0x0f] << 4)
 
         Rcon1, Rcon2 = 0b10000000, 0b00110000
-        w[0] = (key & 0xff00) >> 8
-        w[1] = key & 0x00ff
-        w[2] = w[0] ^ Rcon1 ^ sub2Nib(w[1])
-        w[3] = w[2] ^ w[1]
-        w[4] = w[2] ^ Rcon2 ^ sub2Nib(w[3])
-        w[5] = w[4] ^ w[3]
+        self.w[0] = (key & 0xff00) >> 8
+        self.w[1] = key & 0x00ff
+        self.w[2] = self.w[0] ^ Rcon1 ^ sub2Nib(self.w[1])
+        self.w[3] = self.w[2] ^ self.w[1]
+        self.w[4] = self.w[2] ^ Rcon2 ^ sub2Nib(self.w[3])
+        self.w[5] = self.w[4] ^ self.w[3]
 
     def encrypt(self, ptext):
         """Encrypt plaintext block"""
-        print("Type is ", type(ptext))
+        
+        # self.keyExp(0b0100101011110101)
+
+        ptext =int(ptext, base = 2)
+        print("new Type is  ", type(ptext))
+
+        print("val is ",ptext)
         def mixCol(s):
-            return [s[0] ^ mult(4, s[2]), s[1] ^ mult(4, s[3]),
-                    s[2] ^ mult(4, s[0]), s[3] ^ mult(4, s[1])]    
+            return [s[0] ^ self.mult(4, s[2]), s[1] ^ self.mult(4, s[3]),
+                    s[2] ^ self.mult(4, s[0]), s[3] ^ self.mult(4, s[1])]    
         
         state = self.intToVec(((self.w[0] << 8) + self.w[1]) ^ ptext)
-        state = self.mixCol(shiftRow(sub4NibList(sBox, state)))
-        state = self.addKey(intToVec((w[2] << 8) + w[3]), state)
-        state = self.shiftRow(sub4NibList(sBox, state))
-        return vecToInt(addKey(intToVec((w[4] << 8) + w[5]), state))
+        state = mixCol(self.shiftRow(self.sub4NibList(self.sBox, state)))
+        state = self.addKey(self.intToVec((self.w[2] << 8) + self.w[3]), state)
+        state = self.shiftRow(self.sub4NibList(self.sBox, state))
+        return self.vecToInt(self.addKey(self.intToVec((self.w[4] << 8) + self.w[5]), state))
         
     def decrypt(self, ctext):
         """Decrypt ciphertext block"""

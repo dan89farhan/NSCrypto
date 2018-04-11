@@ -114,7 +114,7 @@ def encrypt(request):
 
                         #  message=bin(int(message,base=2))
                         print("Message is ", message)
-                        encryptValue = aes.encrypt(bin(int(message,base=2)))
+                        encryptValue = aes.encrypt(message)
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     
