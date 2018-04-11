@@ -15,6 +15,7 @@ from .hill import Hill
 from .vernam import Vernam
 from .railfence import RailFence
 from .columnar import Columnar
+from .AES import AES
 import string
 # Create your views here.
 
@@ -108,6 +109,12 @@ def encrypt(request):
                     elif symmetric_tech == 'columnar':
                         columnar = Columnar()
                         encryptValue = columnar.EncryptMessage(key, message)
+                    elif symmetric_tech == 'aes':
+                        aes = AES()
+
+                        #  message=bin(int(message,base=2))
+                        print("Message is ", message)
+                        encryptValue = aes.encrypt(bin(int(message,base=2)))
                     encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
                     return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                     

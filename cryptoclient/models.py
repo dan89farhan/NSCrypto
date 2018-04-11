@@ -16,11 +16,11 @@ class EncryptDecrypt(models.Model):
         ('vernam cipher','Vernam Cipher'),
         ('rail fence', 'Rail Fence'),
         ('columnar','Columnar'),
-        
+        ('aes', 'AES'),
     ]
 
     ASYMMETRIC_TECH = [
-        ('des', 'des 8 bit  ')
+        
     ]
     symmetric_asymmetric = models.CharField(max_length = 100, choices = SYMMETRIC_ASYMMETRIC, default = 'symmetric')
     symmetric_tech = models.CharField(max_length = 100, choices = SYMMETRIC_TECH, default = '')

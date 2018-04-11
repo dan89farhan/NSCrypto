@@ -48,7 +48,7 @@ $(document).ready(function () {
             }
             
             $(symmetric_tech).change(function () {
-                console.log($(this).val()+"Hello");
+                console.log($(this).val()+" Hello");
                 if ($(this).val() == "ceaser cipher") {
                     $(".message-key").fadeIn();
                     $(".message-key2").fadeIn();
@@ -87,7 +87,13 @@ $(document).ready(function () {
                 }
 
 
-
+    
+                else if ($(this).val() == "aes") {
+                    console.log("In aes");
+                    
+                    $(".message-key").fadeIn();
+                    $(".message-key2").fadeIn();
+                }
 
 
 
