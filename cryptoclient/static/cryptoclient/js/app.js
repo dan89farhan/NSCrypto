@@ -102,30 +102,6 @@ $(document).ready(function () {
                     $(".message-key2").fadeIn();
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				
                 else {
 
                     console.log("in else ", $(this).val())
@@ -147,7 +123,7 @@ $(document).ready(function () {
             }
             $(asymmetric_tech).change(function () {
                 console.log($(this).val())
-                if ($(this).val() == "des") {
+                if ($(this).val() == "rsa") {
                     $(".message-key").fadeIn();
                     $(".message-key2").fadeIn();
 

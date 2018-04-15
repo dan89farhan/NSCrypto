@@ -31,11 +31,11 @@ class SDES():
     
     def ip(self, inputByte):
         """Perform the initial permutation on data"""
-        return perm(inputByte, IPtable)
+        return self.perm(inputByte, self.IPtable)
     
     def fp(self, inputByte):
         """Perform the final permutation on data"""
-        return perm(inputByte, FPtable)
+        return self.perm(inputByte, self.FPtable)
     
     def swapNibbles(self, inputByte):
         """Swap the two nibbles of data"""
@@ -45,21 +45,21 @@ class SDES():
         """Generate the two required subkeys"""
         def leftShift(keyBitList):
             """Perform a circular left shift on the first and second five bits"""
-            shiftedKey = [None] * KeyLength
+            shiftedKey = [None] * self.KeyLength
             shiftedKey[0:9] = keyBitList[1:10]
             shiftedKey[4] = keyBitList[0]
             shiftedKey[9] = keyBitList[5]
             return shiftedKey
     
         # Converts input key (integer) into a list of binary digits
-        keyList = [(key & 1 << i) >> i for i in reversed(range(KeyLength))]
-        permKeyList = [None] * KeyLength
-        for index, elem in enumerate(P10table):
+        keyList = [(key & 1 << i) >> i for i in reversed(range(self.KeyLength))]
+        permKeyList = [None] * self.KeyLength
+        for index, elem in enumerate(self.P10table):
             permKeyList[index] = keyList[elem - 1]
         shiftedOnceKey = leftShift(permKeyList)
         shiftedTwiceKey = leftShift(leftShift(shiftedOnceKey))
         subKey1 = subKey2 = 0
-        for index, elem in enumerate(P8table):
+        for index, elem in enumerate(self.P8table):
             subKey1 += (128 >> index) * shiftedOnceKey[elem - 1]
             subKey2 += (128 >> index) * shiftedTwiceKey[elem - 1]
         return (subKey1, subKey2)
@@ -67,24 +67,38 @@ class SDES():
     def fk(self, subKey, inputData):
         """Apply Feistel function on data with given subkey"""
         def F(sKey, rightNibble):
-            aux = sKey ^ perm(swapNibbles(rightNibble), EPtable)
+            aux = sKey ^ self.perm(self.swapNibbles(rightNibble), self.EPtable)
             index1 = ((aux & 0x80) >> 4) + ((aux & 0x40) >> 5) + \
                     ((aux & 0x20) >> 5) + ((aux & 0x10) >> 2)
             index2 = ((aux & 0x08) >> 0) + ((aux & 0x04) >> 1) + \
                     ((aux & 0x02) >> 1) + ((aux & 0x01) << 2)
-            sboxOutputs = swapNibbles((S0table[index1] << 2) + S1table[index2])
-            return perm(sboxOutputs, P4table)
+            sboxOutputs = self.swapNibbles((self.S0table[index1] << 2) + self.S1table[index2])
+            return self.perm(sboxOutputs, self.P4table)
     
         leftNibble, rightNibble = inputData & 0xf0, inputData & 0x0f
         return (leftNibble ^ F(subKey, rightNibble)) | rightNibble
     
     def encrypt(self, key, plaintext):
         """Encrypt plaintext with given key"""
+
+        plaintext = int(plaintext, base = 2)
+        print("new plain type is  ", type(plaintext))
+
+        key = int(key, base = 2)
+        print("new key type is  ", type(key))
+
         data = self.fk(self.keyGen(key)[0], self.ip(plaintext))
         return self.fp(self.fk(self.keyGen(key)[1], self.swapNibbles(data)))
     
     def decrypt(self, key, ciphertext):
         """Decrypt ciphertext with given key"""
+
+        ciphertext = int(ciphertext, base = 2)
+        print("new plain type is  ", type(ciphertext))
+
+        key = int(key, base = 2)
+        print("new key type is  ", type(key))
+
         data = self.fk(self.keyGen(key)[1], self.ip(ciphertext))
         return self.fp(self.fk(self.keyGen(key)[0], self.swapNibbles(data)))  
     

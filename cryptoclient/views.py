@@ -16,6 +16,9 @@ from .vernam import Vernam
 from .railfence import RailFence
 from .columnar import Columnar
 from .AES import AES
+from .sdes import SDES
+from .rsa import RSA
+
 import string
 # Create your views here.
 
@@ -117,13 +120,30 @@ def encrypt(request):
                         encryptValue = aes.encrypt(message)
                         encryptValue = bin(encryptValue)
                     elif symmetric_tech == 'sdes':
-                        print('message is ', message)
-                        
 
-                    encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
-                    return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
+                        sdes = SDES()
+                        print('message is ', message)
+                        encryptValue = sdes.encrypt(key, message)
+                        encryptValue = bin(encryptValue)
+
                     
-                    
+                
+                elif algo == 'Asymmetric Algo':
+                    if asymmetric_tech == 'rsa':
+                        rsa = RSA()
+                        encryptValue, public, private = rsa.encrypt(key, message)
+                        print('encryptValue, public, private ', encryptValue, public, private)
+                        public, n = public
+                        private, n = private
+                        print('after encryptValue, public, private ', encryptValue, public, private, n)
+                        key = str(public)+','+str(private)+','+ str(n)
+                        print('final key is ', key)
+                        
+                    else:
+                        print('in else')
+                
+                encryptdecrypt = saveToDB(algo, symmetric_tech, asymmetric_tech, encryptValue, key)
+                return HttpResponseRedirect(reverse('cryptoclient:thanks', args=(encryptdecrypt.id, )))
                         
     else:
         form = CryptoForm()
@@ -162,6 +182,22 @@ def decrypt(request):
             # print("message is ", message)
             message = aes.decrypt(message)
             message = bin(message)
+        
+        elif symmetric_tech == 'sdes':
+            sdes = SDES()
+            message = sdes.decrypt(key, message)
+            message = bin(message)
+    elif algo == 'Asymmetric Algo':
+        if asymmetric_tech == 'rsa':
+            rsa = RSA()
+            public, private, n = key.split(',')
+            message = message.replace('[', '')
+            message = message.replace(']', '')
+            message = list(map(int, message.split(',')))
+            print('before message is ', message)
+            message = rsa.decrypt(public, n, message)
+            print('message is ', message)
+            
     encryptdecrypt.message = message
     print("message is ", message)
     # encryptdecrypt.save()

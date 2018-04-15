@@ -21,7 +21,7 @@ class EncryptDecrypt(models.Model):
     ]
 
     ASYMMETRIC_TECH = [
-        
+        ('rsa', 'RSA'),
     ]
     symmetric_asymmetric = models.CharField(max_length = 100, choices = SYMMETRIC_ASYMMETRIC, default = 'symmetric')
     symmetric_tech = models.CharField(max_length = 100, choices = SYMMETRIC_TECH, default = '')
