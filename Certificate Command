@@ -1,0 +1,4 @@
+keytool -genkey -keyalg RSA -alias tomcat -keystore certificate.jks -validity 30 -keysize 2048
+
+keytool -list -v -keystore selfsigned.jks
+
